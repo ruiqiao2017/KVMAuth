@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class TCPServer {
     private static final int BOSS_GROUP_THREAD_NUMBER = 1;
-    private static final int WORKER_GROUP_THREAD_NUMBER = 2;
+    private static final int WORKER_GROUP_THREAD_NUMBER = 3;
     private static final int SO_BACKLOG_LENGTH = 1024;
     private final EventLoopGroup bossGroup = new NioEventLoopGroup(BOSS_GROUP_THREAD_NUMBER);
     private final EventLoopGroup workerGroup = new NioEventLoopGroup(WORKER_GROUP_THREAD_NUMBER);
@@ -73,6 +73,6 @@ public class TCPServer {
         } catch (InterruptedException e) {
             log.error("<stopServer>:workerGroup,{}", e.toString());
         }
-        this.log.info("<stopServer>:TCPServer is stopped");
+        log.info("<stopServer>:TCPServer is stopped");
     }
 }
