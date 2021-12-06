@@ -1,6 +1,5 @@
 package com.hiklife.kvm.net;
 
-
 import com.hiklife.kvm.KVMSession;
 import com.hiklife.kvm.protocol.packet.KVMPacket;
 import io.netty.channel.ChannelHandlerContext;
@@ -9,13 +8,10 @@ import io.netty.util.AttributeKey;
 import lombok.extern.slf4j.Slf4j;
 
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 @Slf4j
 public class TCPServerHandler extends ChannelInboundHandlerAdapter {
     public static final AttributeKey<KVMSession> KEY = AttributeKey.valueOf("IO");
-    public static Map<String, KVMSession> deviceSessionMap = new ConcurrentHashMap<>(100);
+    //public static Map<String, KVMSession> deviceSessionMap = new ConcurrentHashMap<>(100);
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object source) throws Exception {
@@ -34,11 +30,11 @@ public class TCPServerHandler extends ChannelInboundHandlerAdapter {
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         log.error("<exceptionCaught>: close the channel. {}", cause.toString());
         super.exceptionCaught(ctx, cause);
-        KVMSession session = new KVMSession(ctx.channel());
-        if(session.getDevice()!=null){
-            session.kickDeviceOff(session.getDevice());
-            deviceSessionMap.remove(session.getDevice().getSn());
-        }
+//        KVMSession session = new KVMSession(ctx.channel());
+//        if(session.getDevice()!=null){
+//            session.kickDeviceOff(session.getDevice());
+//            deviceSessionMap.remove(session.getDevice().getSn());
+//        }
         ctx.channel().close();
     }
 
@@ -48,10 +44,10 @@ public class TCPServerHandler extends ChannelInboundHandlerAdapter {
         super.channelInactive(ctx);
         log.info("<exceptionCaught>: {}",String.format("client out... : %s", ctx.channel()));
         KVMSession session = ctx.channel().attr(KEY).getAndSet(null);
-        if(!session.isDuplication() && session.getDevice()!=null){
-            session.kickDeviceOff(session.getDevice());
-            deviceSessionMap.remove(session.getDevice().getSn());
-        }
+//        if(!session.isDuplication() && session.getDevice()!=null){
+//            session.kickDeviceOff(session.getDevice());
+//            deviceSessionMap.remove(session.getDevice().getSn());
+//        }
         ctx.channel().close();
     }
 
@@ -60,7 +56,7 @@ public class TCPServerHandler extends ChannelInboundHandlerAdapter {
         super.channelRegistered(ctx);
         super.channelRegistered(ctx);
         log.info("<channelRegistered>:{}",String.format("client registered...：   %s ...", ctx.channel()));
-        DeviceSession deviceSession = new DeviceSession(ctx.channel());
-        ctx.channel().attr(KEY).set(deviceSession);
+        KVMSession session = new KVMSession(ctx.channel());
+        ctx.channel().attr(KEY).set(session);
     }
 }

@@ -27,7 +27,7 @@ public class TCPServer {
         ServerBootstrap serverBootstrap = new ServerBootstrap();
         serverBootstrap.group(bossGroup,workerGroup);
         serverBootstrap.channel(NioServerSocketChannel.class)
-                .childHandler(new TCPServerChannelInitializer(config.getHeartbeatTime()))
+                .childHandler(new TCPServerChannelInitializer(config))
                 .option(ChannelOption.SO_BACKLOG, SO_BACKLOG_LENGTH)
                 .option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
                 .handler(new LoggingHandler(LogLevel.INFO))

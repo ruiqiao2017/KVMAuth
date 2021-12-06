@@ -7,13 +7,13 @@ import com.hiklife.kvm.protocol.packet.KVMPacket;
 public interface ReadHandler {
     /**
      * device-->server
-     * 设备协议认证
+     * 设备信息
      */
-    void readRequestAuth(KVMPacket packet) throws InvalidKVMMessageException;
+    void readNotifyKVMInfo(KVMPacket packet) throws InvalidKVMMessageException;
     /**
      * device-->server
-     * 心跳
+     * 连接信息
      */
-    void readRequestHeartBeat(KVMPacket packet) throws InvalidKVMMessageException;
+    void readNotifyKVMCon(KVMPacket packet) throws InvalidKVMMessageException;
 
 }
