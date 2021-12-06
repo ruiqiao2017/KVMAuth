@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class KVMSession implements ReadHandler, WriteHandler {
     private final Channel channel;
-
     public KVMSession(Channel channel) {
         this.channel = channel;
     }
@@ -30,12 +29,14 @@ public class KVMSession implements ReadHandler, WriteHandler {
     public void readNotifyKVMInfo(KVMPacket packet) throws InvalidKVMMessageException {
         NotifyKVMInfo notifyKVMInfo = new NotifyKVMInfo(packet);
         log.debug("<readNotifyKVMInfo>: 收到KVM信息。");
+        KVMEventSingleton.getInstance().getEvent().onReadNotifyKVMInfo(notifyKVMInfo.getKvmDevice());
     }
 
     @Override
     public void readNotifyKVMCon(KVMPacket packet) throws InvalidKVMMessageException {
         NotifyKVMCon notifyKVMCon = new NotifyKVMCon(packet);
         log.debug("<readNotifyKVMCon>: 收到KVM连接信息。");
+        KVMEventSingleton.getInstance().getEvent().onReadNotifyKVMCon(notifyKVMCon.getKvmCon());
     }
 
     private void write(WritePacket packet) {

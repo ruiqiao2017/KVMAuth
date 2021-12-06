@@ -7,6 +7,9 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * #1# PACKET = |FRAMEHEAD|PAYLOADLEN|PAYLOAD|CRC|
  * #2# PAYLOAD = |CMD|PAYLOADHEAD|PAYLOADDATA
@@ -27,7 +30,7 @@ public class KVMPacket {
     private byte[] head;
     private int payloadLength;
     private PacketCMD cmd;
-    private byte[] payloadData;
+    private List<PacketItem> payloadData;
     private short crc;
 
     public KVMPacket(ByteBuf byteBuf) throws InvalidKVMMessageException {
@@ -45,11 +48,17 @@ public class KVMPacket {
         if(cmd.equals(PacketCMD.NONE)) {
             throw new InvalidKVMMessageException("CMD check");
         }
-        payloadData = new byte[payloadLength - 1];
-        byteBuf.readBytes(payloadData,0,payloadLength - 1);
-
-       // crc = new byte[4];
-        //byteBuf.readBytes(crc,0,4);
+        payloadData = new ArrayList<>();
+        int readLength = 0;
+        while(readLength < (payloadLength - 1)){
+            byte no = byteBuf.readByte();
+            int length = byteBuf.readInt();
+            byte[] data = new byte[length];
+            byteBuf.readBytes(data,0,length);
+            PacketItem packetItem = new PacketItem(no,length,data);
+            payloadData.add(packetItem);
+            readLength = readLength + length + 3;
+        }
         crc = byteBuf.readShort();
         //checkCRC
         short crcValue = CRC16.calCrc16(crcByteBuf);

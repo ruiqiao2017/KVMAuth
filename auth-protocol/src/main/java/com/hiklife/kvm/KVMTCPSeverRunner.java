@@ -1,6 +1,6 @@
 package com.hiklife.kvm;
 
-import com.hiklife.kvm.entity.KVMDevice;
+import com.hiklife.kvm.protocol.packet.normal.KVMInfo;
 import com.hiklife.kvm.net.TCPConfig;
 import com.hiklife.kvm.net.TCPServer;
 import com.hiklife.kvm.protocol.exceptions.InvalidKVMMessageException;
@@ -12,7 +12,7 @@ public class KVMTCPSeverRunner implements TCPSeverRunner{
 
     public KVMTCPSeverRunner(TCPConfig config){
         server = new TCPServer(config);
-        //KVMSession.setEvent(config.getEvent());
+        KVMEventSingleton.getInstance().setEvent(config.getEvent());
     }
     @Override
     public void startServer(){
@@ -24,7 +24,7 @@ public class KVMTCPSeverRunner implements TCPSeverRunner{
     }
 
     @Override
-    public void writeRequestTest(KVMDevice device) throws InvalidKVMMessageException {
+    public void writeRequestTest(KVMInfo device) throws InvalidKVMMessageException {
 
     }
 
