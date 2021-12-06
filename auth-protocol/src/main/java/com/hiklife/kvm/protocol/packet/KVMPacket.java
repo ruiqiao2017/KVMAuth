@@ -1,6 +1,7 @@
 package com.hiklife.kvm.protocol.packet;
 
 import com.hiklife.kvm.protocol.exceptions.InvalidKVMMessageException;
+import com.hiklife.kvm.utils.CRC16;
 import com.hiklife.kvm.utils.DataProcessingUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -26,8 +27,8 @@ public class KVMPacket {
     private byte[] head;
     private int payloadLength;
     private PacketCMD cmd;
-    private byte[] payloadHeadAndData;
-    private byte[] crc;
+    private byte[] payloadData;
+    private short crc;
 
     public KVMPacket(ByteBuf byteBuf) throws InvalidKVMMessageException {
         head = new byte[4];
@@ -35,17 +36,26 @@ public class KVMPacket {
         if(DataProcessingUtil.compareBytes(head,FRAME_HEAD)){
             throw new InvalidKVMMessageException("FRAME_HEAD check");
         }
+        byte[] crcByteBuf = new byte[byteBuf.readableBytes() - 4];
+        byteBuf.getBytes(0,crcByteBuf,0,2);
+
         payloadLength = byteBuf.readInt();
         byte cmdByte = byteBuf.readByte();
         cmd = PacketCMD.parse(cmdByte);
         if(cmd.equals(PacketCMD.NONE)) {
             throw new InvalidKVMMessageException("CMD check");
         }
-        payloadHeadAndData = new byte[payloadLength - 1];
-        byteBuf.readBytes(payloadHeadAndData,0,payloadLength - 1);
-        crc = new byte[4];
-        byteBuf.readBytes(crc,0,4);
+        payloadData = new byte[payloadLength - 1];
+        byteBuf.readBytes(payloadData,0,payloadLength - 1);
+
+       // crc = new byte[4];
+        //byteBuf.readBytes(crc,0,4);
+        crc = byteBuf.readShort();
         //checkCRC
+        short crcValue = CRC16.calCrc16(crcByteBuf);
+        if(crc != crcValue) {
+            throw new InvalidKVMMessageException("CRC check");
+        }
     }
 
     public static void main(String[] args){

@@ -2,7 +2,6 @@ package com.hiklife.kvm;
 
 import com.hiklife.kvm.entity.KVMDevice;
 import com.hiklife.kvm.net.TCPConfig;
-import com.hiklife.kvm.net.TCPServer;
 
 public class TcpServerMain {
     public static void main(String[] args){
