@@ -1,8 +1,9 @@
 package com.hiklife.kvm.net;
 
-
 import com.hiklife.kvm.KVMEvent;
+import lombok.Data;
 
+@Data
 public class TCPConfig {
     private final static int DEFAULT_HEARTBEAT_TIME = 15;
     private final static int MAX_LOSS_CONNECT_COUNT = 3;
@@ -29,27 +30,4 @@ public class TCPConfig {
         this(port,DEFAULT_HEARTBEAT_TIME,MAX_LOSS_CONNECT_COUNT,event);
     }
 
-    public int getPort() {
-        return port;
-    }
-
-    public void setPort(int port) {
-        this.port = port;
-    }
-
-    public int getHeartbeatTime() {
-        return heartbeatTime;
-    }
-
-    public void setHeartbeatTime(int heartbeatTime) {
-        this.heartbeatTime = heartbeatTime;
-    }
-
-    public KVMEvent getEvent() {
-        return event;
-    }
-
-    public void setEvent(KVMEvent event) {
-        this.event = event;
-    }
 }

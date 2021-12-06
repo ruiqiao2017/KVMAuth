@@ -137,6 +137,13 @@ public class DataProcessingUtil {
         return sb.toString();
     }
 
+    public static String byteToHexString(byte combhexBt) {
+        StringBuilder sb = new StringBuilder(2);
+        sb.append(hexString.charAt((combhexBt & 0xf0) >> 4));
+        sb.append(hexString.charAt((combhexBt & 0x0f) >> 0));
+        return sb.toString();
+    }
+
     public static String bytesToHexString(byte[] combhexBt, int off, int length) {
         if (combhexBt == null || combhexBt.length == 0) {
             return null;
@@ -732,5 +739,20 @@ public class DataProcessingUtil {
     public static String bytesToAscii(byte[] bytes) {
         return bytesToAscii(bytes, 0, bytes.length);
 
+    }
+
+    public static boolean compareBytes(byte[] byte1, byte[] byte2){
+        if(byte1 == null || byte2 == null){
+            return false;
+        }
+        if(byte1.length != byte2.length){
+            return false;
+        }
+        for(int i=0; i<byte1.length; i++){
+            if(byte1[i] != byte2[i]){
+                return false;
+            }
+        }
+        return true;
     }
 }
