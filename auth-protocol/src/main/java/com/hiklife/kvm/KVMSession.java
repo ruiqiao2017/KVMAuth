@@ -39,10 +39,17 @@ public class KVMSession implements ReadHandler, WriteHandler {
         KVMEventSingleton.getInstance().getEvent().onReadNotifyKVMCon(notifyKVMCon.getKvmCon());
     }
 
+    @Override
+    public void writeResponseTest() {
+
+    }
+
     private void write(WritePacket packet) {
         channel.writeAndFlush(packet);
     }
     private void closeSession(){
         channel.close();
     }
+
+
 }
