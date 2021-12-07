@@ -2,5 +2,3 @@
 /target/
 /.idea/
 /log/
-/auth-server/target/
-/auth-protocol/target/
