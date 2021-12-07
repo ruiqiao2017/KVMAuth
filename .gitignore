@@ -1,2 +1,6 @@
 # Project exclude paths
 /target/
+/.idea/
+/log/
+/auth-server/target/
+/auth-protocol/target/
